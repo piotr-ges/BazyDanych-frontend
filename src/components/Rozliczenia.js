@@ -72,8 +72,8 @@ const Rozliczenia = ({ isAdmin }) => {
                     <div className="col-md-3">
                         <select
                             className="form-select"
-                            value={editRozliczenie?.status || ''}
-                            onChange={(e) => setEditRozliczenie({ ...editRozliczenie, status: e.target.value })}
+                            value={addRozliczenie?.status || ''}
+                            onChange={(e) => setAddRozliczenie({ ...addRozliczenie, status: e.target.value })}
                         >
                             <option value="oczekujące">Oczekujące</option>
                             <option value="zrealizowane">Zrealizowane</option>
@@ -85,23 +85,23 @@ const Rozliczenia = ({ isAdmin }) => {
                             type="number"
                             className="form-control"
                             placeholder="Kwota"
-                            value={editRozliczenie?.kwota || ''}
-                            onChange={(e) => setEditRozliczenie({ ...editRozliczenie, kwota: e.target.value })}
+                            value={addRozliczenie?.kwota || ''}
+                            onChange={(e) => setAddRozliczenie({ ...addRozliczenie, kwota: e.target.value })}
                         />
                     </div>
                     <div className="col-md-3">
                         <input
                             type="date"
                             className="form-control"
-                            value={editRozliczenie?.data_rozliczenia || ''}
-                            onChange={(e) => setEditRozliczenie({ ...editRozliczenie, data_rozliczenia: e.target.value })}
+                            value={addRozliczenie?.data_rozliczenia || ''}
+                            onChange={(e) => setAddRozliczenie({ ...addRozliczenie, data_rozliczenia: e.target.value })}
                         />
                     </div>
                     <div className="col-md-3">
                         <select
                             className="form-select"
-                            value={editRozliczenie?.mieszkaniec || ''}
-                            onChange={(e) => setEditRozliczenie({ ...editRozliczenie, mieszkaniec: e.target.value })}
+                            value={addRozliczenie?.mieszkaniec || ''}
+                            onChange={(e) => setAddRozliczenie({ ...addRozliczenie, mieszkaniec: e.target.value })}
                         >
                             <option value="">Wybierz mieszkańca</option>
                             {users.map((user) => (

@@ -71,6 +71,7 @@ const Harmonogram = ({ isAdmin }) => {
             ) : (
                 <p>Brak danych do wyświetlenia</p>
             )}
+            <Link to="/" className='btn btn-dark'>Powrót do Home</Link>
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchData, postData, deleteData } from '../api'; // Import deleteData function
+import { fetchData, postData, deleteData, updateData } from '../api'; // Import updateData function
 import './Common.css'; // Import the common CSS file
 
 const Uchwala = ({ isAdmin }) => {
@@ -8,6 +8,7 @@ const Uchwala = ({ isAdmin }) => {
         tytul: '',
         opis: ''
     });
+    const [editId, setEditId] = useState(null); // State to track the ID of the uchwala being edited
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -28,7 +29,12 @@ const Uchwala = ({ isAdmin }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await postData('uchwaly/', formData);
+            if (editId) {
+                await updateData(`uchwaly/${editId}/`, formData);
+                setEditId(null);
+            } else {
+                await postData('uchwaly/', formData);
+            }
             setFormData({
                 tytul: '',
                 opis: ''
@@ -37,8 +43,8 @@ const Uchwala = ({ isAdmin }) => {
             const result = await fetchData('uchwaly/');
             setData(result);
         } catch (err) {
-            console.error("Error creating uchwala:", err);
-            setError("Something went wrong while creating uchwala.");
+            console.error("Error creating/updating uchwala:", err);
+            setError("Something went wrong while creating/updating uchwala.");
         }
     };
 
@@ -53,6 +59,14 @@ const Uchwala = ({ isAdmin }) => {
         }
     };
 
+    const handleEdit = (item) => {
+        setFormData({
+            tytul: item.tytul,
+            opis: item.opis
+        });
+        setEditId(item.id);
+    };
+
     return (
         <div className="container">
             <h1>Uchwały</h1>
@@ -64,17 +78,22 @@ const Uchwala = ({ isAdmin }) => {
                     <p><strong>Tytuł:</strong> {item.tytul}</p>
                     <p><strong>Opis:</strong> {item.opis}</p>
                     <p><strong>Data Przyjęcia:</strong> {item.data_przyjecia}</p>
-                    {isAdmin && <button onClick={() => handleDelete(item.id)} className='btn btn-danger'>Usuń</button>}
+                    {isAdmin && (
+                        <>
+                            <button onClick={() => handleEdit(item)} className='btn btn-success button-spacing'>Edytuj</button>
+                            <button onClick={() => handleDelete(item.id)} className='btn btn-danger'>Usuń</button>
+                        </>
+                    )}
                 </div>
             ))}
 
-                {isAdmin && (
+            {isAdmin && (
                 <form onSubmit={handleSubmit}>
                     <input type="text" name="tytul" value={formData.tytul} onChange={handleChange} placeholder="Tytuł" required />
-                    <textarea name="opis" value={formData.opis} onChange={handleChange} placeholder="Opis" required class = 'form-control'/>
-                    <button type="submit" className='btn btn-primary'>Dodaj Uchwałę</button>
+                    <textarea name="opis" value={formData.opis} onChange={handleChange} placeholder="Opis" required className='form-control'/>
+                    <button type="submit" className='btn btn-success'>{editId ? 'Zaktualizuj' : 'Dodaj'} Uchwałę</button>
                 </form>
-                )}
+            )}
         </div>
     );
 };

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { fetchData } from '../api';
-import { AuthContext } from '../context/AuthContext'; // Import kontekstu autoryzacji
 import { useParams } from 'react-router-dom';  // Używamy hooka do pobrania parametru id z URL
+import { AuthContext } from '../context/AuthContext';
 
-const SpotkanieDetails = () => {
+
+const SpotkanieDetails = ({ isAdmin }) => {
     const { id } = useParams();  // Pobieramy id spotkania z URL
-    const { user } = useContext(AuthContext); // Sprawdzamy użytkownika
     const [spotkanie, setSpotkanie] = useState(null);
     const [isEditing, setIsEditing] = useState(false); // Czy jesteśmy w trybie edycji
+    const { user } = useContext(AuthContext);
 
     const [tytul, setTytul] = useState('');
     const [dataSpotkania, setDataSpotkania] = useState('');
@@ -15,22 +16,19 @@ const SpotkanieDetails = () => {
     const [opis, setOpis] = useState('');
 
     const getSpotkanieDetails = async () => {
-            const result = await fetchData(`spotkania/${id}/`);
-            setSpotkanie(result);
+        const result = await fetchData(`spotkania/${id}/`);
+        setSpotkanie(result);
 
-            // Wypełniamy pola formularza danymi z API
-            setTytul(result.tytul);
-            setDataSpotkania(result.data_spotkania);
-            setCzasSpotkania(result.czas_spotkania);
-            setOpis(result.opis);
-        };
-
+        // Wypełniamy pola formularza danymi z API
+        setTytul(result.tytul);
+        setDataSpotkania(result.data_spotkania);
+        setCzasSpotkania(result.czas_spotkania);
+        setOpis(result.opis);
+    };
 
     useEffect(() => {
         getSpotkanieDetails();
     }, [id]);
-
-    
 
     const isUserEnrolled = () => {
         return Array.isArray(spotkanie?.uczestnicy) && spotkanie.uczestnicy.some(
@@ -44,12 +42,7 @@ const SpotkanieDetails = () => {
                 method: 'POST',
             });
 
-
             await getSpotkanieDetails();
-            // Dodajemy użytkownika do listy uczestników
-            
-
-            
         } catch (error) {
             console.error('Błąd podczas zapisywania:', error);
             alert('Nie udało się zapisać na spotkanie.');
@@ -179,7 +172,7 @@ const SpotkanieDetails = () => {
                             )}
 
                             {/* Przycisk Edytuj widoczny tylko dla administratora */}
-                            {user && user.is_staff && (
+                            {isAdmin && (
                                 <button onClick={() => setIsEditing(true)} className='btn btn-success button-spacing'>Edytuj</button>
                             )}
 
@@ -189,7 +182,7 @@ const SpotkanieDetails = () => {
                                 ) : (
                                     <button onClick={handleEnroll} className='btn btn-success button-spacing'>Zapisz się</button>
                                 )
-                    )}
+                            )}
                         </>
                     )}
                 </>

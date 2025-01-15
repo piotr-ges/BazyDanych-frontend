@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { postData } from '../api';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom'; // Importujemy useNavigate
 
 const DodajSpotkanie = () => {
     const { user } = useContext(AuthContext);
@@ -39,6 +40,12 @@ const DodajSpotkanie = () => {
             console.error('Błąd przy dodawaniu spotkania:', error);
             alert('Nie udało się dodać spotkania');
         }
+    };
+
+    const navigate = useNavigate(); // Tworzymy instancję useNavigate
+
+    const handleCancel = () => {
+        navigate('/harmonogram'); // Przekierowanie do strony harmonogramu
     };
 
     return (
@@ -83,7 +90,8 @@ const DodajSpotkanie = () => {
                             placeholder='Wpisz opis spotkania...'
                         />
                     </div>
-                    <button type="submit">Dodaj Spotkanie</button>
+                    <button type="submit" className='btn btn-success button-spacing'>Dodaj Spotkanie</button>
+                    <button type="button" onClick={handleCancel} className='btn btn-secondary button-spacing'>Anuluj</button>
                 </form>
             ) : (
                 <p>Nie masz uprawnień do dodawania spotkań.</p>

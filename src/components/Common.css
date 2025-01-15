@@ -54,5 +54,118 @@ pre {
 .button-spacing{
     margin-right: 10px;
 }
+.button-spacing2{
+    margin-left: 10px;
+}
+
+/* Stylizacja głównego kontenera */
+/* Stylizacja głównego kontenera */
+/* Stylizacja głównego kontenera */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    position: relative;
+    margin-top: 0px;
+    background-image: url('/public/background.jpg'); /* Odwołanie do obrazu w folderze public */
+    background-size: cover; /* Obraz będzie rozciągnięty na całą szerokość i wysokość */
+    background-position: center; /* Obraz będzie wyśrodkowany */
+    background-repeat: no-repeat; /* Obraz nie będzie się powtarzał */
+    min-height: 100vh; /* Zapewnia, że tło zajmuje całą wysokość strony */
+    color: white; /* Kolor tekstu na tle obrazu */
+    position: relative;
+}
+
+.top-bar {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9); /* Lekko przezroczysty biały */
+    display: flex;
+    justify-content: flex-end; /* Przyciski są wyrównane do prawej */
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Delikatny cień */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Stylizacja nagłówka */
+.home-title {
+    font-size: 4rem;
+    color: white; /* Kolor tekstu */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Cień dla lepszej widoczności */
+    margin-bottom: 30px;
+    border-bottom: 3px solid white; /* Kreska pod nagłówkiem */
+    padding-bottom: 20px;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Usuwanie kropek z listy */
+.menu {
+    list-style-type: none;  /* Usuwa kropki */
+    padding: 0;  /* Usuwa domyślne wcięcia */
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Zwiększamy minimalną szerokość kafelka */
+    gap: 40px;
+    width: 100%;
+    max-width: 1000px; /* Zwiększamy maksymalną szerokość */
+}
+
+/* Stylizacja pojedynczego kafelka */
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* Półprzezroczyste tło */
+    color: #333;
+    font-size: 1.5rem;
+    text-decoration: none;
+    border-radius: 15px;
+    border: 2px solid rgba(200, 200, 200, 0.8); /* Obramowanie */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Cień kafelka */
+    font-weight: 600;
+    height: 150px;
+}
+
+/* Efekt hover - podświetlenie na szaro */
+.menu-item:hover {
+    background-color: #f1f1f1;  /* Szare tło przy najechaniu */
+    transform: scale(1.05);  /* Powiększenie kafelka */
+    border-color: #bbb;  /* Jaśniejsze obramowanie */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2); /* Silniejszy cień przy hover */
+}
+
+/* Stylizacja przycisku logout */
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-weight: 600;
+}
+
+.logout-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Powiększenie przycisku */
+}
+
+.logout-button:focus {
+    outline: none;
+}
 
 

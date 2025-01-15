@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { fetchData} from '../api';
-import { AuthContext } from '../context/AuthContext'; // Importujemy kontekst autoryzacji
+import React, { useEffect, useState } from 'react';
+import { fetchData } from '../api';
 import './Common.css'; // Importujemy wspólny plik CSS
 import { Link } from 'react-router-dom';
 
-const Harmonogram = () => {
+const Harmonogram = ({ isAdmin }) => {
     const [data, setData] = useState([]);
-    const { user } = useContext(AuthContext); // Sprawdzamy użytkownika
 
     useEffect(() => {
         const getData = async () => {
@@ -14,21 +12,17 @@ const Harmonogram = () => {
             setData(result);
         };
         getData();
-    }, []);
+    }, []); // Ładowanie danych tylko raz przy pierwszym renderze
 
     const handleDelete = async (id) => {
-        if (user && user.is_staff) {
+        if (isAdmin) {
             try {
                 console.log(`Usuwanie spotkania z ID: ${id}`);
-                
-                // Wysłanie zapytania DELETE
-                await fetchData(`spotkania/${id}/`, {
-                    method: 'DELETE',
-                });
-    
+                await fetchData(`spotkania/${id}/`, { method: 'DELETE' });
+
                 // Usuwamy spotkanie z lokalnego stanu
                 setData((prevData) => prevData.filter((item) => item.id !== id));
-    
+
                 alert('Spotkanie zostało usunięte');
             } catch (error) {
                 console.error('Błąd przy usuwaniu spotkania:', error);
@@ -43,10 +37,11 @@ const Harmonogram = () => {
         <div className="container">
             <h1>Harmonogramy</h1>
 
-            {user && user.is_staff && (
+            {/* Wyświetlanie przycisków tylko dla administratora */}
+            {isAdmin && (
                 <div>
                     <Link to="/dodaj-spotkanie">
-                        <button className='btn btn-success'>Dodaj Spotkanie</button>
+                        <button className="btn btn-success">Dodaj Spotkanie</button>
                     </Link>
                 </div>
             )}
@@ -58,13 +53,18 @@ const Harmonogram = () => {
                         <p><strong>Data Spotkania:</strong> {item.data_spotkania}</p>
                         <p><strong>Czas Spotkania:</strong> {item.czas_spotkania}</p>
 
-                        {/* Przycisk szczegółów - przekierowanie do strony szczegółów spotkania */}
                         <Link to={`/spotkanie/${item.id}`}>
-                            <button className='btn btn-success button-spacing'>Szczegóły</button>
+                            <button className="btn btn-success button-spacing">Szczegóły</button>
                         </Link>
 
-                        {user && user.is_staff && (
-                            <button onClick={() => handleDelete(item.id)} className='btn btn-danger button-spacing'>Usuń</button>
+                        {/* Przycisk usuwania dostępny tylko dla admina */}
+                        {isAdmin && (
+                            <button
+                                onClick={() => handleDelete(item.id)}
+                                className="btn btn-danger button-spacing"
+                            >
+                                Usuń
+                            </button>
                         )}
                     </div>
                 ))

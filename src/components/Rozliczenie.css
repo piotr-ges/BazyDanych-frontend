@@ -1,0 +1,52 @@
+.rozliczenia-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.rozliczenia-table th,
+.rozliczenia-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.rozliczenia-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.rozliczenia-table td {
+    font-size: 14px;
+}
+
+button {
+    margin: 5px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.add-rozliczenie-form,
+.edit-rozliczenie-form {
+    margin-bottom: 20px;
+}
+
+input,
+select {
+    margin: 5px 0;
+    padding: 8px;
+    font-size: 14px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}

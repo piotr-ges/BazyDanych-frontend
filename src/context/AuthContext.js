@@ -16,10 +16,13 @@ export const AuthProvider = ({ children }) => {
                     setUser(userInfo);
                     setIsLoggedIn(true);
                 }
+            } else {
+                setIsLoggedIn(false);
+                setUser(null);
             }
         };
         checkUserStatus();
-    }, []);
+    }, []); // Ładuj status użytkownika tylko raz przy pierwszym renderze
 
     const login = (userInfo) => {
         setUser(userInfo);

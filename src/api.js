@@ -9,20 +9,13 @@ export const fetchData = async (endpoint, options = {}) => {
             'Authorization': `Token ${token}`,
             ...options.headers,
         },
+        credentials: 'include', // Umożliwia wysyłanie ciasteczek
     });
-
-    if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(errorMessage || 'Błąd serwera');
+    if (response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.reload();
     }
-
-    // Sprawdzamy, czy odpowiedź zawiera treść
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-        return response.json(); // Parsujemy tylko jeśli odpowiedź zawiera JSON
-    }
-
-    return null; // Brak treści w odpowiedzi (np. przy DELETE)
+    return response.json();
 };
 
 export const postData = async (endpoint, data, options = {}) => {
@@ -38,6 +31,9 @@ export const postData = async (endpoint, data, options = {}) => {
     });
     const responseData = await response.json();
     if (!response.ok) {
+        console.error('Error response:', responseData);
+        console.error('Request data:', data);
+        console.error('Request options:', options);
         throw new Error(responseData.error || 'Something went wrong');
     }
     return responseData;
@@ -54,11 +50,32 @@ export const updateData = async (endpoint, data, options = {}) => {
         },
         body: JSON.stringify(data),
     });
-    if (response.status === 401) {
-        localStorage.removeItem('token');
-        window.location.reload();
+    const responseData = await response.json();
+    if (!response.ok) {
+        console.error('Error response:', responseData);
+        console.error('Request data:', data);
+        console.error('Request options:', options);
+        throw new Error(responseData.error || 'Something went wrong');
     }
-    return response.json();
+    return responseData;
+};
+
+export const deleteData = async (endpoint, options = {}) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`,
+            ...options.headers,
+        },
+    });
+    if (!response.ok) {
+        const responseData = await response.json();
+        console.error('Error response:', responseData);
+        throw new Error(responseData.error || 'Something went wrong');
+    }
+    return response;
 };
 
 export const login = async (username, password) => {
@@ -90,22 +107,6 @@ export const getUserInfo = async () => {
     }
     if (!response.ok) {
         throw new Error('Failed to fetch user info');
-    }
-    return response.json();
-};
-
-export const deleteData = async (endpoint) => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}${endpoint}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`,
-        },
-    });
-    if (response.status === 401) {
-        localStorage.removeItem('token');
-        window.location.reload();
     }
     return response.json();
 };

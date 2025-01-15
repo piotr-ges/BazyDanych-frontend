@@ -7,7 +7,7 @@ const Home = ({ handleLogout }) => {
         <div className='home-container'>
             <h1 className='home-title'>Home</h1>
             <ul className="menu">
-                <li><Link to="/mieszkaniec" className="menu-item">Mieszkaniecy</Link></li>
+                <li><Link to="/mieszkaniec" className="menu-item">Mieszkańcy</Link></li>
                 <li><Link to="/uchwala" className="menu-item">Uchwaly</Link></li>
                 <li><Link to="/harmonogram" className="menu-item">Harmonogram</Link></li>
                 <li><Link to="/usterka" className="menu-item">Usterki</Link></li>

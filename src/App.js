@@ -31,6 +31,7 @@ const App = () => {
             const userInfo = await getUserInfo();
             setIsAdmin(userInfo.is_staff);
             
+            window.location.href = "/";
         } else {
             alert('Login failed');
         }
@@ -42,6 +43,8 @@ const App = () => {
         setIsLoggedIn(false);
         setIsAdmin(false);
         localStorage.removeItem('token');
+
+        window.location.href = "/login";
     };
 
     useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchData, postData, updateData, deleteData } from '../api';
-import './Common.css';
+import './Mieszkaniec.css'; // Import the new CSS file
 import { Link } from 'react-router-dom';
 
 const Mieszkaniec = ({ isAdmin }) => {
@@ -60,7 +60,6 @@ const Mieszkaniec = ({ isAdmin }) => {
     };
 
     const handleCancel = () => {
-        // Przywracamy formularz do pustego stanu
         setFormData({
             id: '',
             username: '',
@@ -76,12 +75,8 @@ const Mieszkaniec = ({ isAdmin }) => {
     const handleDelete = async (id) => {
         if (isAdmin) {
             try {
-                // Wysłanie zapytania DELETE
                 await deleteData(`users/${id}/`);
-
-                // Po usunięciu usuwamy użytkownika z listy w stanie
                 setData((prevData) => prevData.filter((item) => item.id !== id));
-
                 alert('Mieszkaniec został usunięty');
             } catch (error) {
                 console.error('Błąd przy usuwaniu mieszkańca:', error);
@@ -101,27 +96,29 @@ const Mieszkaniec = ({ isAdmin }) => {
                     Dodaj Mieszkańca
                 </Link>
             )}
-            {data.length > 0 ? (
-                data.map((item) => (
-                    <div key={item.id} className="data-block">
-                        <p><strong>ID:</strong> {item.id}</p>
-                        <p><strong>Username:</strong> {item.username}</p>
-                        <p><strong>First Name:</strong> {item.first_name}</p>
-                        <p><strong>Last Name:</strong> {item.last_name}</p>
-                        <p><strong>Adres:</strong> {item.adres}</p>
-                        <p><strong>Telefon:</strong> {item.telefon}</p>
-                        <p><strong>Email:</strong> {item.email}</p>
-                        {!isAdmin && (
-                            <button onClick={() => setFormData(item)} className='btn btn-success'>Edytuj</button>
-                        )}
-                        {isAdmin && (
-                            <button onClick={() => handleDelete(item.id)} className='btn btn-danger button-spacing'>Usuń</button>
-                        )}
-                    </div>
-                ))
-            ) : (
-                <p>Brak danych do wyświetlenia</p>
-            )}
+            <div className="grid-container">
+                {data.length > 0 ? (
+                    data.map((item) => (
+                        <div key={item.id} className="data-tile">
+                            <div className="tile-header">
+                                <p className="name"><strong>{item.first_name} {item.last_name}</strong></p>
+                            </div>
+                            <p><strong>Username:</strong> {item.username}</p>
+                            <p><strong>Adres:</strong> {item.adres}</p>
+                            <p><strong>Telefon:</strong> {item.telefon}</p>
+                            <p><strong>Email:</strong> {item.email}</p>
+                            {!isAdmin && (
+                                <button onClick={() => setFormData(item)} className='btn btn-success'>Edytuj</button>
+                            )}
+                            {isAdmin && (
+                                <button onClick={() => handleDelete(item.id)} className='btn btn-danger button-spacing'>Usuń</button>
+                            )}
+                        </div>
+                    ))
+                ) : (
+                    <p>Brak danych do wyświetlenia</p>
+                )}
+            </div>
             {!isAdmin && formData.id && (
                 <div className="form-container">
                     <form onSubmit={handleSubmit} className="form">

@@ -111,6 +111,15 @@ const Rozliczenia = ({ isAdmin }) => {
                             ))}
                         </select>
                     </div>
+                    <div className="col-md-12 d-flex justify-content-center mt-4 mb-4">
+                        <textarea
+                            className="form-control"
+                            placeholder="Opis"
+                            value={addRozliczenie?.opis || ''}
+                            onChange={(e) => setAddRozliczenie({ ...addRozliczenie, opis: e.target.value })}
+                            rows="2"
+                        ></textarea>
+                    </div>
                     <div className="col-md-1">
                         <button className="btn btn-success" onClick={handleAddRozliczenie}>
                             Dodaj
@@ -208,6 +217,15 @@ const Rozliczenia = ({ isAdmin }) => {
                                     </option>
                                 ))}
                             </select>
+                        </div>
+                        <div className="col-md-12 d-flex justify-content-center mt-4">
+                            <textarea
+                                className="form-control"
+                                placeholder="Opis"
+                                value={editRozliczenie.opis || ''}
+                                onChange={(e) => setEditRozliczenie({ ...editRozliczenie, opis: e.target.value })}
+                                rows="3"
+                            ></textarea>
                         </div>
                     </div>
                     <div className="row mt-3">

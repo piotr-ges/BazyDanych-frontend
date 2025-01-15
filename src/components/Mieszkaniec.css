@@ -1,0 +1,55 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh; /* Ensure the container takes the full height of the viewport */
+    box-sizing: border-box;
+    width: 100%; /* Utilize full width of the page */
+}
+
+.data-tile {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: calc(30% - 32px); /* Adjust width for 3 tiles per row */
+    box-sizing: border-box;
+}
+
+.grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px; /* Add gap between tiles */
+    width: 100%; /* Utilize full width of the page */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.button-spacing {
+    margin-left: 8px;
+}

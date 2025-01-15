@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { fetchData, deleteData, updateData, postData } from '../api'; // Funkcje API
+import { fetchData, deleteData, updateData, postData } from '../api';
 import { Link } from 'react-router-dom';
+import './Licznik.css'
 
 const Licznik = ({ isAdmin }) => {
     const [data, setData] = useState([]);
     const [newLicznik, setNewLicznik] = useState({ typ_licznika: '', odczyt: '', data_odczytu: '', mieszkaniec: '' });
-    const [users, setUsers] = useState([]);  // Lista użytkowników
+    const [users, setUsers] = useState([]); // Lista użytkowników
     const [editLicznik, setEditLicznik] = useState(null);
 
     useEffect(() => {
@@ -20,10 +21,10 @@ const Licznik = ({ isAdmin }) => {
         };
 
         const getUsers = async () => {
-            const usersEndpoint = 'users/';  // Endpoint do pobierania użytkowników
+            const usersEndpoint = 'users/'; // Endpoint do pobierania użytkowników
             try {
                 const result = await fetchData(usersEndpoint);
-                setUsers(result);  // Ustawienie użytkowników do wyboru
+                setUsers(result); // Ustawienie użytkowników do wyboru
             } catch (error) {
                 console.error("Błąd pobierania użytkowników:", error);
             }
@@ -48,7 +49,7 @@ const Licznik = ({ isAdmin }) => {
         try {
             await updateData(endpoint, updatedData);
             setData(data.map(item => (item.id === id ? { ...item, ...updatedData } : item)));
-            setEditLicznik(null);  // Zamknięcie formularza edycji po zapisaniu
+            setEditLicznik(null); // Zamknięcie formularza edycji po zapisaniu
         } catch (error) {
             console.error("Błąd podczas edytowania:", error);
         }
@@ -65,10 +66,23 @@ const Licznik = ({ isAdmin }) => {
         }
     };
 
+    const getIcon = (typ) => {
+        switch (typ) {
+            case 'woda':
+                return '💧';
+            case 'gaz':
+                return '🔥';
+            case 'prąd':
+                return '⚡';
+            default:
+                return '❓';
+        }
+    };
+
     return (
         <div className="container">
             <h1>Liczniki</h1>
-            
+
             {/* Formularz dodawania licznika */}
             {isAdmin && (
                 <div className="add-licznik-form">
@@ -76,6 +90,7 @@ const Licznik = ({ isAdmin }) => {
                     <select 
                         value={newLicznik.typ_licznika} 
                         onChange={(e) => setNewLicznik({ ...newLicznik, typ_licznika: e.target.value })}>
+                        <option value=''>Typ licznika</option>
                         <option value="woda">Woda</option>
                         <option value="gaz">Gaz</option>
                         <option value="prąd">Prąd</option>
@@ -107,30 +122,36 @@ const Licznik = ({ isAdmin }) => {
 
             {/* Wyświetlanie liczników */}
             {data.length > 0 ? (
-                data.map((item) => {
-                    // Szukamy użytkownika na podstawie id mieszkania
-                    const user = users.find((user) => user.id === item.mieszkaniec);
-                    return (
-                        <div key={item.id} className="data-block">
-                            <p><strong>ID:</strong> {item.id}</p>
-                            <p><strong>Typ:</strong> {item.typ_licznika}</p>
-                            <p><strong>Wartość:</strong> {item.odczyt}</p>
-                            <p><strong>Data Odczytu:</strong> {item.data_odczytu}</p>
-
-                            {/* Wyświetlanie imienia i nazwiska mieszkańca przypisanego do licznika */}
-                            {user && (
-                                <p><strong>Mieszkaniec:</strong> {user.first_name} {user.last_name}</p>
-                            )}
-
-                            {isAdmin && (
-                                <div>
-                                    <button onClick={() => handleDelete(item.id)} className='btn btn-danger button-spacing2 button-spacing'>Usuń</button>
-                                    <button onClick={() => setEditLicznik(item)} className='btn btn-success'>Edytuj</button>
+                <div className="liczniki-grid">
+                    {data.map((item) => {
+                        // Szukamy użytkownika na podstawie id mieszkania
+                        const user = users.find((user) => user.id === item.mieszkaniec);
+                        return (
+                            <div key={item.id} className="licznik-card">
+                                <div className="licznik-header">
+                                    <span className="licznik-icon">{getIcon(item.typ_licznika)}</span>
+                                    <span className="licznik-type">{item.typ_licznika}</span>
                                 </div>
-                            )}
-                        </div>
-                    );
-                })
+                                <div className="licznik-value">
+                                    {item.odczyt}
+                                </div>
+                                <div className="licznik-footer">
+                                    {user && (
+                                        <span>{user.first_name} {user.last_name}</span>
+                                    )}
+                                    <span>{item.data_odczytu}</span>
+                                </div>
+
+                                {isAdmin && (
+                                    <div className="licznik-actions">
+                                        <button onClick={() => handleDelete(item.id)} className='btn btn-danger'>Usuń</button>
+                                        <button onClick={() => setEditLicznik(item)} className='btn btn-success'>Edytuj</button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
             ) : (
                 <p>Brak danych do wyświetlenia</p>
             )}
@@ -177,3 +198,4 @@ const Licznik = ({ isAdmin }) => {
 };
 
 export default Licznik;
+

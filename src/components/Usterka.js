@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchData, postData, updateData } from '../api';
 import { Link, useParams } from 'react-router-dom';
 import './Common.css'; // Import the common CSS file
+import './Usterka.css'
 
 const Usterka = ({ isAdmin }) => {
     const { id } = useParams();
@@ -9,6 +10,7 @@ const Usterka = ({ isAdmin }) => {
     const [newUsterka, setNewUsterka] = useState('');
     const [usterka, setUsterka] = useState(null);
     const [newStatus, setNewStatus] = useState('');
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
@@ -21,7 +23,14 @@ const Usterka = ({ isAdmin }) => {
                 setData(result);
             }
         };
+
+        const getUsers = async () => {
+            const usersResult = await fetchData('users/');
+            setUsers(usersResult);
+        };
+
         getData();
+        getUsers();
     }, [id, isAdmin]);
 
     const handleAddUsterka = async () => {
@@ -72,10 +81,21 @@ const Usterka = ({ isAdmin }) => {
         }
     };
 
+    const getUserName = (userId) => {
+        const user = users.find(u => u.id === userId);
+        return user ? `${user.first_name} ${user.last_name}` : 'Nieznany mieszkaniec';
+    };
+
+    const getUserAddress = (userId) => {
+        const user = users.find(u => u.id === userId);
+        return user ? `${user.adres}` : 'Nieznany mieszkaniec';
+    };
+
     if (id && usterka) {
         return (
             <div className="container">
                 <h1>Usterka</h1>
+                <p style={{ fontSize: '1.5em', fontWeight: 'bold' }}>{usterka.status}</p>
                 <p>{usterka.opis}</p>
                 <select
                     value={newStatus}
@@ -97,10 +117,10 @@ const Usterka = ({ isAdmin }) => {
             <h1>Usterki</h1>
             {data.map((item) => (
                 <div key={item.id} className="usterka-block">
-                    <p><strong>ID:</strong> {item.id}</p>
-                    <p><strong>Mieszkaniec:</strong> {item.mieszkaniec}</p>
+                    <p style={{ fontSize: '1.5em', fontWeight: 'bold' }}><strong>Status:</strong> {item.status}</p>
+                    <p><strong>Mieszkaniec:</strong> {getUserName(item.mieszkaniec)}</p>
+                    <p><strong>Adres:</strong> {getUserAddress(item.mieszkaniec)}</p>
                     <p><strong>Opis:</strong> {item.opis}</p>
-                    <p><strong>Status:</strong> {item.status}</p>
                     {isAdmin && (
                         <div>
                             <select
